@@ -1,6 +1,2 @@
-# Voicerecorder
-
-
-- configure server and sampling rate at ```app/src/main/java/com/winlab/voicerecorder/Static.java```
-
-- audio files are saved in ```/sdcard/Android/data/com.winlab.voicerecorder/files/Music/```
+# Audio + Accelerometer + Gyroscope
+![340ebbe48a211a452560ad88746137d](https://user-images.githubusercontent.com/41242069/160527547-1e108487-acb7-4ba6-ac6d-f26fc4224d58.png)
