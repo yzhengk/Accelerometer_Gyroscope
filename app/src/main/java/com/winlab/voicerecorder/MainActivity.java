@@ -46,7 +46,9 @@ public class MainActivity extends WearableActivity {
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
+    private Sensor gyroscope;
     private StringBuffer sensorLog = new StringBuffer();
+    private StringBuffer strgry = new StringBuffer();
     private int samplingPeriodUs = 10000; // 100Hz
 
     Recorder recorder;
@@ -61,6 +63,7 @@ public class MainActivity extends WearableActivity {
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
         // Enables Always-on
         setAmbientEnabled();
@@ -113,6 +116,7 @@ public class MainActivity extends WearableActivity {
 
                 recorder.startRecording(); // 开始
                 sensorManager.registerListener(sensorEventListener, accelerometer, samplingPeriodUs);
+                sensorManager.registerListener(sensorEventListener, gyroscope, samplingPeriodUs);
                 //keep screen on while recording
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -135,6 +139,11 @@ public class MainActivity extends WearableActivity {
                     writer_acc.write(sensorLog.toString());
                     sensorLog = new StringBuffer();
                     writer_acc.close();
+
+                    FileWriter writer_gry = new FileWriter(getBaseContext().getDataDir() + "/sensors_gry_" + Time + ".csv");
+                    writer_gry.write(strgry.toString());
+                    strgry = new StringBuffer();
+                    writer_gry.close();
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -165,6 +174,9 @@ public class MainActivity extends WearableActivity {
                         sensorLog.append(str);
 //                        Log.d(LOG_TAG, str);
                         break;
+                    case Sensor.TYPE_GYROSCOPE:
+                        String gry = String.format("%d,%f,%f,%f\n", event.timestamp, event.values[0], event.values[1], event.values[2]);
+                        strgry.append(gry);
                     default:
                         break;
                 }
